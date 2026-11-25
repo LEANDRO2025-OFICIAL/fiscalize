@@ -1,0 +1,1949 @@
+{
+  "id": "055d64f7-0483-44fb-a2d7-bfd04dbc5e47",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.organizacao": {
+      "name": "organizacao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cnpj": {
+          "name": "cnpj",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "organizacao_cnpj_uq": {
+          "name": "organizacao_cnpj_uq",
+          "columns": [
+            {
+              "expression": "cnpj",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "organizacao_tipo_idx": {
+          "name": "organizacao_tipo_idx",
+          "columns": [
+            {
+              "expression": "tipo",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.unidade": {
+      "name": "unidade",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sigla": {
+          "name": "sigla",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "unidade_org_idx": {
+          "name": "unidade_org_idx",
+          "columns": [
+            {
+              "expression": "organizacao_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "unidade_organizacao_id_organizacao_id_fk": {
+          "name": "unidade_organizacao_id_organizacao_id_fk",
+          "tableFrom": "unidade",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.usuario": {
+      "name": "usuario",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "senha_hash": {
+          "name": "senha_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "govbr_sub": {
+          "name": "govbr_sub",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nivel_govbr": {
+          "name": "nivel_govbr",
+          "type": "nivel_govbr",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "papel": {
+          "name": "papel",
+          "type": "papel",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email_verificado": {
+          "name": "email_verificado",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "usuario_email_uq": {
+          "name": "usuario_email_uq",
+          "columns": [
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "usuario_govbr_sub_uq": {
+          "name": "usuario_govbr_sub_uq",
+          "columns": [
+            {
+              "expression": "govbr_sub",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "usuario_org_idx": {
+          "name": "usuario_org_idx",
+          "columns": [
+            {
+              "expression": "organizacao_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "usuario_organizacao_id_organizacao_id_fk": {
+          "name": "usuario_organizacao_id_organizacao_id_fk",
+          "tableFrom": "usuario",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.contrato": {
+      "name": "contrato",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unidade_id": {
+          "name": "unidade_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "numero": {
+          "name": "numero",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "objeto": {
+          "name": "objeto",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fornecedor_nome": {
+          "name": "fornecedor_nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fornecedor_cnpj": {
+          "name": "fornecedor_cnpj",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "valor_global": {
+          "name": "valor_global",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data_assinatura": {
+          "name": "data_assinatura",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data_fim": {
+          "name": "data_fim",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "situacao": {
+          "name": "situacao",
+          "type": "contrato_situacao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'vigente'"
+        },
+        "fiscal_id": {
+          "name": "fiscal_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pncp_numero_controle": {
+          "name": "pncp_numero_controle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "categoria": {
+          "name": "categoria",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'servico'"
+        },
+        "endereco_obra": {
+          "name": "endereco_obra",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "latitude": {
+          "name": "latitude",
+          "type": "numeric(9, 6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "longitude": {
+          "name": "longitude",
+          "type": "numeric(9, 6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "contrato_org_idx": {
+          "name": "contrato_org_idx",
+          "columns": [
+            {
+              "expression": "organizacao_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "contrato_situacao_idx": {
+          "name": "contrato_situacao_idx",
+          "columns": [
+            {
+              "expression": "situacao",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "contrato_organizacao_id_organizacao_id_fk": {
+          "name": "contrato_organizacao_id_organizacao_id_fk",
+          "tableFrom": "contrato",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "contrato_unidade_id_unidade_id_fk": {
+          "name": "contrato_unidade_id_unidade_id_fk",
+          "tableFrom": "contrato",
+          "tableTo": "unidade",
+          "columnsFrom": [
+            "unidade_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "contrato_fiscal_id_usuario_id_fk": {
+          "name": "contrato_fiscal_id_usuario_id_fk",
+          "tableFrom": "contrato",
+          "tableTo": "usuario",
+          "columnsFrom": [
+            "fiscal_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.designacao": {
+      "name": "designacao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contrato_id": {
+          "name": "contrato_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fiscal_id": {
+          "name": "fiscal_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "portaria": {
+          "name": "portaria",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data_inicio": {
+          "name": "data_inicio",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data_fim": {
+          "name": "data_fim",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ativo": {
+          "name": "ativo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'sim'"
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "designacao_contrato_idx": {
+          "name": "designacao_contrato_idx",
+          "columns": [
+            {
+              "expression": "contrato_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "designacao_organizacao_id_organizacao_id_fk": {
+          "name": "designacao_organizacao_id_organizacao_id_fk",
+          "tableFrom": "designacao",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "designacao_contrato_id_contrato_id_fk": {
+          "name": "designacao_contrato_id_contrato_id_fk",
+          "tableFrom": "designacao",
+          "tableTo": "contrato",
+          "columnsFrom": [
+            "contrato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "designacao_fiscal_id_usuario_id_fk": {
+          "name": "designacao_fiscal_id_usuario_id_fk",
+          "tableFrom": "designacao",
+          "tableTo": "usuario",
+          "columnsFrom": [
+            "fiscal_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.item_contratado": {
+      "name": "item_contratado",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contrato_id": {
+          "name": "contrato_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unidade_medida": {
+          "name": "unidade_medida",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantidade_total": {
+          "name": "quantidade_total",
+          "type": "numeric(18, 4)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "valor_unitario": {
+          "name": "valor_unitario",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "situacao": {
+          "name": "situacao",
+          "type": "item_situacao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'previsto'"
+        },
+        "ordem": {
+          "name": "ordem",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "item_contratado_contrato_idx": {
+          "name": "item_contratado_contrato_idx",
+          "columns": [
+            {
+              "expression": "contrato_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "item_contratado_organizacao_id_organizacao_id_fk": {
+          "name": "item_contratado_organizacao_id_organizacao_id_fk",
+          "tableFrom": "item_contratado",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "item_contratado_contrato_id_contrato_id_fk": {
+          "name": "item_contratado_contrato_id_contrato_id_fk",
+          "tableFrom": "item_contratado",
+          "tableTo": "contrato",
+          "columnsFrom": [
+            "contrato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.obrigacao": {
+      "name": "obrigacao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contrato_id": {
+          "name": "contrato_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "obrigacao_tipo",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prazo_dias": {
+          "name": "prazo_dias",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data_limite": {
+          "name": "data_limite",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "obrigacao_contrato_idx": {
+          "name": "obrigacao_contrato_idx",
+          "columns": [
+            {
+              "expression": "contrato_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "obrigacao_organizacao_id_organizacao_id_fk": {
+          "name": "obrigacao_organizacao_id_organizacao_id_fk",
+          "tableFrom": "obrigacao",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "obrigacao_contrato_id_contrato_id_fk": {
+          "name": "obrigacao_contrato_id_contrato_id_fk",
+          "tableFrom": "obrigacao",
+          "tableTo": "contrato",
+          "columnsFrom": [
+            "contrato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.evidencia": {
+      "name": "evidencia",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contrato_id": {
+          "name": "contrato_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enviado_por_id": {
+          "name": "enviado_por_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "evidencia_tipo",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome_arquivo": {
+          "name": "nome_arquivo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mime": {
+          "name": "mime",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ocorrencia_id": {
+          "name": "ocorrencia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chave_s3": {
+          "name": "chave_s3",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sha256": {
+          "name": "sha256",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tamanho_bytes": {
+          "name": "tamanho_bytes",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "observacao": {
+          "name": "observacao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "evidencia_contrato_idx": {
+          "name": "evidencia_contrato_idx",
+          "columns": [
+            {
+              "expression": "contrato_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "evidencia_sha_idx": {
+          "name": "evidencia_sha_idx",
+          "columns": [
+            {
+              "expression": "sha256",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "evidencia_organizacao_id_organizacao_id_fk": {
+          "name": "evidencia_organizacao_id_organizacao_id_fk",
+          "tableFrom": "evidencia",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "evidencia_contrato_id_contrato_id_fk": {
+          "name": "evidencia_contrato_id_contrato_id_fk",
+          "tableFrom": "evidencia",
+          "tableTo": "contrato",
+          "columnsFrom": [
+            "contrato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "evidencia_enviado_por_id_usuario_id_fk": {
+          "name": "evidencia_enviado_por_id_usuario_id_fk",
+          "tableFrom": "evidencia",
+          "tableTo": "usuario",
+          "columnsFrom": [
+            "enviado_por_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.medicao": {
+      "name": "medicao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contrato_id": {
+          "name": "contrato_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numero": {
+          "name": "numero",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "competencia": {
+          "name": "competencia",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "situacao": {
+          "name": "situacao",
+          "type": "medicao_situacao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'rascunho'"
+        },
+        "valor_bruto": {
+          "name": "valor_bruto",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
+        },
+        "valor_glosa": {
+          "name": "valor_glosa",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
+        },
+        "valor_liquido": {
+          "name": "valor_liquido",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
+        },
+        "memoria_calculo": {
+          "name": "memoria_calculo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_por_id": {
+          "name": "criado_por_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aprovado_por_id": {
+          "name": "aprovado_por_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "medicao_contrato_idx": {
+          "name": "medicao_contrato_idx",
+          "columns": [
+            {
+              "expression": "contrato_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "medicao_organizacao_id_organizacao_id_fk": {
+          "name": "medicao_organizacao_id_organizacao_id_fk",
+          "tableFrom": "medicao",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "medicao_contrato_id_contrato_id_fk": {
+          "name": "medicao_contrato_id_contrato_id_fk",
+          "tableFrom": "medicao",
+          "tableTo": "contrato",
+          "columnsFrom": [
+            "contrato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "medicao_criado_por_id_usuario_id_fk": {
+          "name": "medicao_criado_por_id_usuario_id_fk",
+          "tableFrom": "medicao",
+          "tableTo": "usuario",
+          "columnsFrom": [
+            "criado_por_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "medicao_aprovado_por_id_usuario_id_fk": {
+          "name": "medicao_aprovado_por_id_usuario_id_fk",
+          "tableFrom": "medicao",
+          "tableTo": "usuario",
+          "columnsFrom": [
+            "aprovado_por_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.recebimento": {
+      "name": "recebimento",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contrato_id": {
+          "name": "contrato_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "medicao_id": {
+          "name": "medicao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data": {
+          "name": "data",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "situacao": {
+          "name": "situacao",
+          "type": "recebimento_situacao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pendente'"
+        },
+        "parecer": {
+          "name": "parecer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "recebimento_contrato_idx": {
+          "name": "recebimento_contrato_idx",
+          "columns": [
+            {
+              "expression": "contrato_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "recebimento_organizacao_id_organizacao_id_fk": {
+          "name": "recebimento_organizacao_id_organizacao_id_fk",
+          "tableFrom": "recebimento",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "recebimento_contrato_id_contrato_id_fk": {
+          "name": "recebimento_contrato_id_contrato_id_fk",
+          "tableFrom": "recebimento",
+          "tableTo": "contrato",
+          "columnsFrom": [
+            "contrato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "recebimento_medicao_id_medicao_id_fk": {
+          "name": "recebimento_medicao_id_medicao_id_fk",
+          "tableFrom": "recebimento",
+          "tableTo": "medicao",
+          "columnsFrom": [
+            "medicao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.evento_auditoria": {
+      "name": "evento_auditoria",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "sequencia": {
+          "name": "sequencia",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "evento_audit_tipo",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entidade": {
+          "name": "entidade",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entidade_id": {
+          "name": "entidade_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ator_id": {
+          "name": "ator_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hash_anterior": {
+          "name": "hash_anterior",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hash": {
+          "name": "hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "evento_auditoria_seq_uq": {
+          "name": "evento_auditoria_seq_uq",
+          "columns": [
+            {
+              "expression": "organizacao_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "sequencia",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "evento_auditoria_entidade_idx": {
+          "name": "evento_auditoria_entidade_idx",
+          "columns": [
+            {
+              "expression": "entidade",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "entidade_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "evento_auditoria_organizacao_id_organizacao_id_fk": {
+          "name": "evento_auditoria_organizacao_id_organizacao_id_fk",
+          "tableFrom": "evento_auditoria",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "evento_auditoria_ator_id_usuario_id_fk": {
+          "name": "evento_auditoria_ator_id_usuario_id_fk",
+          "tableFrom": "evento_auditoria",
+          "tableTo": "usuario",
+          "columnsFrom": [
+            "ator_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.vinculo_fornecedor": {
+      "name": "vinculo_fornecedor",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "contratante_org_id": {
+          "name": "contratante_org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fornecedor_org_id": {
+          "name": "fornecedor_org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'ativo'"
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "vinculo_fornecedor_uq": {
+          "name": "vinculo_fornecedor_uq",
+          "columns": [
+            {
+              "expression": "contratante_org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "fornecedor_org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "vinculo_fornecedor_forn_idx": {
+          "name": "vinculo_fornecedor_forn_idx",
+          "columns": [
+            {
+              "expression": "fornecedor_org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "vinculo_fornecedor_contratante_org_id_organizacao_id_fk": {
+          "name": "vinculo_fornecedor_contratante_org_id_organizacao_id_fk",
+          "tableFrom": "vinculo_fornecedor",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "contratante_org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "vinculo_fornecedor_fornecedor_org_id_organizacao_id_fk": {
+          "name": "vinculo_fornecedor_fornecedor_org_id_organizacao_id_fk",
+          "tableFrom": "vinculo_fornecedor",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "fornecedor_org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ocorrencia": {
+      "name": "ocorrencia",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contrato_id": {
+          "name": "contrato_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gravidade": {
+          "name": "gravidade",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "latitude": {
+          "name": "latitude",
+          "type": "numeric(9, 6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "longitude": {
+          "name": "longitude",
+          "type": "numeric(9, 6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prazo": {
+          "name": "prazo",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'aberta'"
+        },
+        "criado_por_id": {
+          "name": "criado_por_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resolucao": {
+          "name": "resolucao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resolvida_em": {
+          "name": "resolvida_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "ocorrencia_contrato_idx": {
+          "name": "ocorrencia_contrato_idx",
+          "columns": [
+            {
+              "expression": "contrato_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "ocorrencia_organizacao_id_organizacao_id_fk": {
+          "name": "ocorrencia_organizacao_id_organizacao_id_fk",
+          "tableFrom": "ocorrencia",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ocorrencia_contrato_id_contrato_id_fk": {
+          "name": "ocorrencia_contrato_id_contrato_id_fk",
+          "tableFrom": "ocorrencia",
+          "tableTo": "contrato",
+          "columnsFrom": [
+            "contrato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ocorrencia_criado_por_id_usuario_id_fk": {
+          "name": "ocorrencia_criado_por_id_usuario_id_fk",
+          "tableFrom": "ocorrencia",
+          "tableTo": "usuario",
+          "columnsFrom": [
+            "criado_por_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.checklist_execucao": {
+      "name": "checklist_execucao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organizacao_id": {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contrato_id": {
+          "name": "contrato_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "modelo": {
+          "name": "modelo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "itens": {
+          "name": "itens",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conformes": {
+          "name": "conformes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "nao_conformes": {
+          "name": "nao_conformes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "criado_por_id": {
+          "name": "criado_por_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "checklist_contrato_idx": {
+          "name": "checklist_contrato_idx",
+          "columns": [
+            {
+              "expression": "contrato_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "checklist_execucao_organizacao_id_organizacao_id_fk": {
+          "name": "checklist_execucao_organizacao_id_organizacao_id_fk",
+          "tableFrom": "checklist_execucao",
+          "tableTo": "organizacao",
+          "columnsFrom": [
+            "organizacao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "checklist_execucao_contrato_id_contrato_id_fk": {
+          "name": "checklist_execucao_contrato_id_contrato_id_fk",
+          "tableFrom": "checklist_execucao",
+          "tableTo": "contrato",
+          "columnsFrom": [
+            "contrato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "checklist_execucao_criado_por_id_usuario_id_fk": {
+          "name": "checklist_execucao_criado_por_id_usuario_id_fk",
+          "tableFrom": "checklist_execucao",
+          "tableTo": "usuario",
+          "columnsFrom": [
+            "criado_por_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.contrato_situacao": {
+      "name": "contrato_situacao",
+      "schema": "public",
+      "values": [
+        "vigente",
+        "suspenso",
+        "encerrado"
+      ]
+    },
+    "public.evento_audit_tipo": {
+      "name": "evento_audit_tipo",
+      "schema": "public",
+      "values": [
+        "criacao",
+        "alteracao",
+        "exclusao",
+        "login",
+        "designacao",
+        "medicao",
+        "evidencia"
+      ]
+    },
+    "public.evidencia_tipo": {
+      "name": "evidencia_tipo",
+      "schema": "public",
+      "values": [
+        "documento",
+        "foto",
+        "planilha",
+        "outro"
+      ]
+    },
+    "public.item_situacao": {
+      "name": "item_situacao",
+      "schema": "public",
+      "values": [
+        "previsto",
+        "em_execucao",
+        "concluido",
+        "cancelado"
+      ]
+    },
+    "public.medicao_situacao": {
+      "name": "medicao_situacao",
+      "schema": "public",
+      "values": [
+        "rascunho",
+        "submetida",
+        "aprovada",
+        "rejeitada"
+      ]
+    },
+    "public.nivel_govbr": {
+      "name": "nivel_govbr",
+      "schema": "public",
+      "values": [
+        "bronze",
+        "prata",
+        "ouro"
+      ]
+    },
+    "public.obrigacao_tipo": {
+      "name": "obrigacao_tipo",
+      "schema": "public",
+      "values": [
+        "entrega",
+        "servico",
+        "relatorio",
+        "pagamento"
+      ]
+    },
+    "public.papel": {
+      "name": "papel",
+      "schema": "public",
+      "values": [
+        "administrador",
+        "controlador",
+        "fiscal",
+        "fornecedor",
+        "leitor"
+      ]
+    },
+    "public.recebimento_situacao": {
+      "name": "recebimento_situacao",
+      "schema": "public",
+      "values": [
+        "pendente",
+        "conforme",
+        "divergente"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

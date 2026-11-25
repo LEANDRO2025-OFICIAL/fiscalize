@@ -1,0 +1,10 @@
+import { pgEnum } from "drizzle-orm/pg-core"; export const papelEnum = pgEnum("papel", ["administrador", "controlador", "fiscal", "fornecedor", "leitor"]); export const nivelGovBrEnum = pgEnum("nivel_govbr", ["bronze", "prata", "ouro"]); export const contratoSituacaoEnum = pgEnum("contrato_situacao", ["vigente", "suspenso", "encerrado"]); export const itemSituacaoEnum = pgEnum("item_situacao", ["previsto", "em_execucao", "concluido", "cancelado"]); export const obrigacaoTipoEnum = pgEnum("obrigacao_tipo", ["entrega", "servico", "relatorio", "pagamento"]); export const evidenciaTipoEnum = pgEnum("evidencia_tipo", ["documento", "foto", "planilha", "outro"]); export const medicaoSituacaoEnum = pgEnum("medicao_situacao", ["rascunho", "submetida", "aprovada", "rejeitada"]); export const recebimentoSituacaoEnum = pgEnum("recebimento_situacao", ["pendente", "conforme", "divergente"]); export const eventoAuditEnum = pgEnum("evento_audit_tipo", ["criacao", "alteracao", "exclusao", "login", "designacao", "medicao", "evidencia", "aditivo", "penalidade", "apuracao"]);
+export const aditivoTipoEnum = pgEnum("aditivo_tipo", ["prorrogacao", "acrescimo", "reducao", "reforma", "acerto", "outro"]);
+export const apuracaoSituacaoEnum = pgEnum("apuracao_situacao", ["aberta", "em_andamento", "contraditorio", "concluida", "arquivada"]);
+export const penalidadeSituacaoEnum = pgEnum("penalidade_situacao", ["sugerida", "aprovada", "cumprida", "cancelada"]);
+export const execucaoTipoEnum = pgEnum("execucao_tipo", ["empenho", "liquidacao", "pagamento"]);
+export const execucaoSituacaoEnum = pgEnum("execucao_situacao", ["pendente", "confirmado", "cancelado"]);
+export const licitacaoModalidadeEnum = pgEnum("licitacao_modalidade", ["pregao", "concorrencia", "dispensa", "inexigibilidade", "leilao"]);
+export const licitacaoSituacaoEnum = pgEnum("licitacao_situacao", ["aberta", "em_andamento", "homologada", "deserta", "cancelada", "arquivada"]);
+export const licitacaoCriterioEnum = pgEnum("licitacao_criterio", ["menor_preco", "melhor_tecnica", "maior_lance_oferta"]);
+export const lanceSituacaoEnum = pgEnum("lance_situacao", ["ativo", "desclassificado", "vencedor"]);

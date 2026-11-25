@@ -1,0 +1,22 @@
+{
+  "name": "contratacao-publica",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "pnpm --filter @contratacao/web dev",
+    "build": "pnpm -r build",
+    "test": "vitest run",
+    "test:e2e": "pnpm --filter e2e test",
+    "db:generate": "pnpm --filter @contratacao/db generate",
+    "db:migrate": "pnpm --filter @contratacao/db migrate",
+    "db:seed": "pnpm --filter @contratacao/db seed",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "db:app-role": "pnpm --filter @contratacao/db db:app-role"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

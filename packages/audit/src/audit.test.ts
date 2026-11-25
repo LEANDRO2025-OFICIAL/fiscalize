@@ -1,0 +1,1 @@
+import { describe, it, expect } from "vitest"; import { jsonCanonico } from "./json-canonico"; describe("jsonCanonico", () => { it("ordena chaves independente da ordem de insercao", () => { expect(jsonCanonico({ b: 1, a: { d: 2, c: 3 } })).toBe('{"a":{"c":3,"d":2},"b":1}'); }); });
