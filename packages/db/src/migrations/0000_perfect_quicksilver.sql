@@ -232,6 +232,8 @@ CREATE TABLE IF NOT EXISTS "checklist_execucao" (
 	"criado_em" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+ALTER TABLE "medicao" ADD COLUMN IF NOT EXISTS "criado_por_id" uuid;--> statement-breakpoint
+ALTER TABLE "medicao" ADD COLUMN IF NOT EXISTS "aprovado_por_id" uuid;--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "unidade" ADD CONSTRAINT "unidade_organizacao_id_organizacao_id_fk" FOREIGN KEY ("organizacao_id") REFERENCES "public"."organizacao"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
