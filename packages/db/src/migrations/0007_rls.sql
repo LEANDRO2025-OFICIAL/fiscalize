@@ -14,6 +14,7 @@ REVOKE UPDATE, DELETE, TRUNCATE ON evento_auditoria FROM fiscalize_app;
 
 DO $$ DECLARE t text; BEGIN
   FOREACH t IN ARRAY ARRAY['unidade','usuario','contrato','designacao','item_contratado','obrigacao','evidencia','medicao','recebimento','evento_auditoria','ocorrencia','checklist_execucao','aditivo','penalidade'] LOOP
+    CONTINUE WHEN to_regclass(format('public.%I', t)) IS NULL; -- aditivo/penalidade só existem a partir da 0008 (RLS reaplicada na 0010)
     EXECUTE format('ALTER TABLE %I ENABLE ROW LEVEL SECURITY', t);
     EXECUTE format('DROP POLICY IF EXISTS tenant ON %I', t);
     EXECUTE format($f$CREATE POLICY tenant ON %I USING (organizacao_id = nullif(current_setting('app.organizacao_id', true), '')::uuid) WITH CHECK (organizacao_id = nullif(current_setting('app.organizacao_id', true), '')::uuid)$f$, t);

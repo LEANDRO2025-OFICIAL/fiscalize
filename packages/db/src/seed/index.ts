@@ -61,11 +61,14 @@ function pdf(titulo: string, linhas: string[]): Buffer {
   saida += `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n${pos.map((p) => `${String(p).padStart(10, "0")} 00000 n \n`).join("")}trailer\n<< /Size ${objs.length + 1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
   return Buffer.from(saida, "latin1");
 }
-const s3 = (() => {
+let s3Cache: Promise<import("@aws-sdk/client-s3").S3Client | null> | undefined;
+function obterS3() {
+  s3Cache ??= (async () => {
+  if (!process.env.S3_ENDPOINT) return null;
   try {
-    const { S3Client } = require("@aws-sdk/client-s3");
+    const { S3Client } = await import("@aws-sdk/client-s3");
     return new S3Client({
-      endpoint: process.env.S3_ENDPOINT ?? "http://localhost:9000",
+      endpoint: process.env.S3_ENDPOINT,
       region: process.env.S3_REGION ?? "us-east-1",
       credentials: {
         accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "minioadmin",
@@ -74,19 +77,22 @@ const s3 = (() => {
       forcePathStyle: true,
     });
   } catch { return null; }
-})();
+  })();
+  return s3Cache;
+}
 const BUCKET = process.env.S3_BUCKET ?? "fiscalize";
 const chaveValida = /^[0-9a-f-]{36}\/[0-9a-f]{64}$/;
 async function gravarArquivo(organizacaoId: string, bytes: Buffer) {
   const sha256 = createHash("sha256").update(bytes).digest("hex");
   const chave = `${organizacaoId}/${sha256}`;
   if (!chaveValida.test(chave)) throw new Error("chave inválida");
+  const s3 = await obterS3();
   if (s3) {
-    const { PutObjectCommand } = require("@aws-sdk/client-s3");
+    const { PutObjectCommand } = await import("@aws-sdk/client-s3");
     await s3.send(new PutObjectCommand({ Bucket: BUCKET, Key: chave, Body: bytes }));
   } else {
-    const fs = require("node:fs/promises");
-    const path = require("node:path");
+    const fs = await import("node:fs/promises");
+    const path = await import("node:path");
     const dir = path.join(process.cwd(), "..", "web", "storage", organizacaoId);
     await fs.mkdir(dir, { recursive: true });
     await fs.writeFile(path.join(dir, sha256), bytes);

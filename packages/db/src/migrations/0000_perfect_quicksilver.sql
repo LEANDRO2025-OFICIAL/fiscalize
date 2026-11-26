@@ -1,12 +1,57 @@
-CREATE TYPE "public"."contrato_situacao" AS ENUM('vigente', 'suspenso', 'encerrado');--> statement-breakpoint
-CREATE TYPE "public"."evento_audit_tipo" AS ENUM('criacao', 'alteracao', 'exclusao', 'login', 'designacao', 'medicao', 'evidencia');--> statement-breakpoint
-CREATE TYPE "public"."evidencia_tipo" AS ENUM('documento', 'foto', 'planilha', 'outro');--> statement-breakpoint
-CREATE TYPE "public"."item_situacao" AS ENUM('previsto', 'em_execucao', 'concluido', 'cancelado');--> statement-breakpoint
-CREATE TYPE "public"."medicao_situacao" AS ENUM('rascunho', 'submetida', 'aprovada', 'rejeitada');--> statement-breakpoint
-CREATE TYPE "public"."nivel_govbr" AS ENUM('bronze', 'prata', 'ouro');--> statement-breakpoint
-CREATE TYPE "public"."obrigacao_tipo" AS ENUM('entrega', 'servico', 'relatorio', 'pagamento');--> statement-breakpoint
-CREATE TYPE "public"."papel" AS ENUM('administrador', 'controlador', 'fiscal', 'fornecedor', 'leitor');--> statement-breakpoint
-CREATE TYPE "public"."recebimento_situacao" AS ENUM('pendente', 'conforme', 'divergente');--> statement-breakpoint
+DO $$ BEGIN
+CREATE TYPE "public"."contrato_situacao" AS ENUM('vigente', 'suspenso', 'encerrado');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+CREATE TYPE "public"."evento_audit_tipo" AS ENUM('criacao', 'alteracao', 'exclusao', 'login', 'designacao', 'medicao', 'evidencia');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+CREATE TYPE "public"."evidencia_tipo" AS ENUM('documento', 'foto', 'planilha', 'outro');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+CREATE TYPE "public"."item_situacao" AS ENUM('previsto', 'em_execucao', 'concluido', 'cancelado');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+CREATE TYPE "public"."medicao_situacao" AS ENUM('rascunho', 'submetida', 'aprovada', 'rejeitada');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+CREATE TYPE "public"."nivel_govbr" AS ENUM('bronze', 'prata', 'ouro');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+CREATE TYPE "public"."obrigacao_tipo" AS ENUM('entrega', 'servico', 'relatorio', 'pagamento');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+CREATE TYPE "public"."papel" AS ENUM('administrador', 'controlador', 'fiscal', 'fornecedor', 'leitor');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+CREATE TYPE "public"."recebimento_situacao" AS ENUM('pendente', 'conforme', 'divergente');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "organizacao" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"nome" text NOT NULL,
@@ -187,6 +232,8 @@ CREATE TABLE IF NOT EXISTS "checklist_execucao" (
 	"criado_em" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+ALTER TABLE "medicao" ADD COLUMN IF NOT EXISTS "criado_por_id" uuid;--> statement-breakpoint
+ALTER TABLE "medicao" ADD COLUMN IF NOT EXISTS "aprovado_por_id" uuid;--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "unidade" ADD CONSTRAINT "unidade_organizacao_id_organizacao_id_fk" FOREIGN KEY ("organizacao_id") REFERENCES "public"."organizacao"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION

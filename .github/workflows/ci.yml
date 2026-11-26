@@ -12,6 +12,20 @@ jobs:
     strategy:
       matrix:
         node-version: [20, 22]
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: contratacao_v2
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d contratacao_v2"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DIRECT_DATABASE_URL: postgres://postgres:postgres@localhost:5432/contratacao_v2
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js ${{ matrix.node-version }}
@@ -24,6 +38,14 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Typecheck
         run: pnpm typecheck
+      - name: Prepare test database
+        run: |
+          PW=$(openssl rand -hex 16)
+          echo "::add-mask::$PW"
+          echo "DATABASE_URL=postgres://fiscalize_app:$PW@localhost:5432/contratacao_v2" >> "$GITHUB_ENV"
+          pnpm db:migrate
+          APP_DB_PASSWORD=$PW pnpm db:app-role
+          pnpm db:seed
       - name: Unit tests
         run: pnpm test
       - name: Build
