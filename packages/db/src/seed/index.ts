@@ -82,11 +82,11 @@ async function gravarArquivo(organizacaoId: string, bytes: Buffer) {
   const chave = `${organizacaoId}/${sha256}`;
   if (!chaveValida.test(chave)) throw new Error("chave inválida");
   if (s3) {
-    const { PutObjectCommand } = require("@aws-sdk/client-s3");
+    const { PutObjectCommand } = await import("@aws-sdk/client-s3");
     await s3.send(new PutObjectCommand({ Bucket: BUCKET, Key: chave, Body: bytes }));
   } else {
-    const fs = require("node:fs/promises");
-    const path = require("node:path");
+    const fs = await import("node:fs/promises");
+    const path = await import("node:path");
     const dir = path.join(process.cwd(), "..", "web", "storage", organizacaoId);
     await fs.mkdir(dir, { recursive: true });
     await fs.writeFile(path.join(dir, sha256), bytes);
